@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "670264904163",
+    "firebase_url": "https://smart-control-f05de.firebaseio.com",
+    "project_id": "smart-control-f05de",
+    "storage_bucket": "smart-control-f05de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670264904163:android:b34a1aa8a7251a89c1b8d6",
+        "android_client_info": {
+          "package_name": "com.example.arsmarthome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "670264904163-d4vh3gagptffbbrtkaks29ki49j3glrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaQCHHT34a3_NH_obMPBbsrwhnbL4vQfE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670264904163-sa4lqi9ofbmlrr81qtpr8k2p2hhlpk58.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
