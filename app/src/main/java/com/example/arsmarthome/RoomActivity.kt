@@ -28,7 +28,6 @@ class RoomActivity : AppCompatActivity() {
         //Toast.makeText(applicationContext, "$roomNames", Toast.LENGTH_SHORT).show()
         RoomData()
     }
-
     fun RoomData(){
         val myRef = database.getReference(mail)
         myRef.addValueEventListener(object : ValueEventListener {
