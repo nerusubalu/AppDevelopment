@@ -34,7 +34,7 @@
         <LinearLayout
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp"
-            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
             android:id="@+id/Email_tb"
             android:layout_below="@+id/title"
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp"
             android:id="@+id/Password_tb"

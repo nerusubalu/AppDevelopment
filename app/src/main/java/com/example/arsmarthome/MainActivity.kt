@@ -1,30 +1,23 @@
 package com.example.arsmarthome
 
-import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 var email = ""
 var password = ""
 var mail = ""
-val TAG = ""
+const val TAG = ""
 private var mAuth: FirebaseAuth? = null
 val database = FirebaseDatabase.getInstance()
-val roomNames: MutableList<String> = mutableListOf()
 var preferences: SharedPreferences? = null
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,11 +55,9 @@ class MainActivity : AppCompatActivity() {
             }
     }
 }
+/*
 class SimpleAsyncTask() : AsyncTask<Void?, Void?, Boolean?>(){
 
-    override fun onPreExecute() {
-        super.onPreExecute()
-    }
 
     override fun doInBackground(vararg params: Void?): Boolean {
         /*for(category in categories) {
@@ -96,4 +87,4 @@ class SimpleAsyncTask() : AsyncTask<Void?, Void?, Boolean?>(){
         }
     }
 
-}
+}*/

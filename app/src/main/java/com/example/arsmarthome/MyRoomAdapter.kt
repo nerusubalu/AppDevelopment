@@ -17,7 +17,7 @@ class MyRoomAdapter (
 ): RecyclerView.Adapter<MyRoomAdapter.MyViewHolder>(){
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int): MyRoomAdapter.MyViewHolder {
+        viewType: Int): MyViewHolder {
         val v: View = LayoutInflater.from(context).inflate(R.layout.room, parent, false)
         return MyViewHolder(v)
     }

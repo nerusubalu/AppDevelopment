@@ -2,7 +2,6 @@ package com.example.arsmarthome
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
@@ -42,7 +41,7 @@ class RoomActivity : AppCompatActivity() {
         setContentView(R.layout.activity_room)
         preferences = getSharedPreferences("data", Context.MODE_PRIVATE)
         if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
-            AddStoredData()
+            addStoredData()
         }
         else{
             RoomData()
@@ -74,18 +73,18 @@ class RoomActivity : AppCompatActivity() {
             }
         })
     }
-
+/*
     private fun addImages(room: String) {
         for (category in images.keys) {
             if (category in room) {
                 images[category]?.let { room_images.add(it) }
             }
         }
-    }
-    private fun AddStoredData() {
-        val List =
+    }*/
+    private fun addStoredData() {
+        val list =
             preferences!!.getStringSet("imageNames", setOf<String>())?.toMutableList<String>()?.sorted()
-        for(li in List!!.sorted()){
+        for(li in list!!.sorted()){
             //Toast.makeText(applicationContext, li, Toast.LENGTH_SHORT).show()
             val roomName = li.split("_".toRegex()).map { it.trim() }
             val category = roomName[1].toLowerCase(Locale.ROOT)
@@ -153,7 +152,7 @@ class RoomActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
-            AddStoredData()
+            addStoredData()
         }
         else{
             RoomData()
@@ -163,7 +162,7 @@ class RoomActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
-            AddStoredData()
+            addStoredData()
         }
         else{
             RoomData()
