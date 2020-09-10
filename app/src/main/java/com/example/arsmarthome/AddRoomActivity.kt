@@ -9,12 +9,13 @@ import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_add_room.*
 import java.util.*
 
+
 class AddRoomActivity : AppCompatActivity() {
     var room = ""
     var pos = -1
     var database = FirebaseDatabase.getInstance()
 
-    val images = listOf<Int>(R.drawable.bedroom,R.drawable.kitchen,R.drawable.livingroom,R.drawable.diningroom,
+    val images_values = listOf<Int>(R.drawable.bedroom,R.drawable.kitchen,R.drawable.livingroom,R.drawable.diningroom,
         R.drawable.bedroom,R.drawable.balcony,R.drawable.garage,R.drawable.office,
         R.drawable.aqua,R.drawable.industry,R.drawable.terrace)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,18 +29,26 @@ class AddRoomActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 room = parent?.getItemAtPosition(position).toString()
                 pos = position
-                img_view.setImageResource(images[position])
+                img_view.setImageResource(images_values[position])
             }
         }
     }
 
     fun addRoom(view: View) {
-        val room = room_name.text.toString()
-        val email = intent.extras?.get("main").toString()
-        val myRef = database.getReference("$email/$room/dummy")
+        val room = room_name.text.toString()+"_$room"
+        //val email = intent.extras?.get("main").toString()
+        val myRef = database.getReference("$mail/$room/dummy")
         myRef.setValue(false)
+        val roomName = room.split("_".toRegex()).map { it.trim() }
+        val category = roomName[1].toLowerCase(Locale.ROOT)
         room_names.add(room)
-        storedata()
+        if (category in images.keys){
+            images[category].let { room_images.add(it!!) }
+        }
+        else{
+            images["garden"].let { room_images.add(it!!) }
+        }
+        //storedata()
         Toast.makeText(this, "$room$pos", Toast.LENGTH_SHORT).show()
     }
 }

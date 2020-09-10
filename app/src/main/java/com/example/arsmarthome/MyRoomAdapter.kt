@@ -27,7 +27,7 @@ class MyRoomAdapter (
         position: Int
     ) {
         holder.i.setImageResource(img[position])
-        holder.tv.text = name[position]
+        holder.tv.text = name[position].split("_".toRegex()).map { it.trim() }[0]
         holder.card.setOnClickListener {
             val intent = Intent(context, ApplianceActivity::class.java)
             intent.putExtra("email",mail)

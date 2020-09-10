@@ -21,8 +21,9 @@ import java.util.*
 
 val images: Map<String,Int> = mapOf(
     "bedroom" to R.drawable.bedroom,
+    "master bedroom" to R.drawable.bedroom,
     "kitchen" to R.drawable.kitchen,
-    "living" to R.drawable.livingroom,
+    "living room" to R.drawable.livingroom,
     "balcony" to R.drawable.balcony,
     "dinning" to R.drawable.diningroom,
     "terrace" to R.drawable.terrace,
@@ -40,7 +41,6 @@ class RoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
         preferences = getSharedPreferences("data", Context.MODE_PRIVATE)
-        //Toast.makeText(applicationContext, "$roomNames", Toast.LENGTH_SHORT).show()
         if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
             AddStoredData()
         }
@@ -54,13 +54,18 @@ class RoomActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (room in dataSnapshot.children) {
                     //Toast.makeText(applicationContext, room.key + "*******" + room.value, Toast.LENGTH_SHORT).show()
+                    val roomName = room.key.toString().split("_".toRegex()).map { it.trim() }
+                    val category = roomName[1].toLowerCase(Locale.ROOT)
                     if (room.key.toString() !in room_names) {
                         room_names.add(room.key.toString())
-                        addImages(room.key.toString())
+                        images[category]?.let { room_images.add(it) }
+                        //addImages(room.key.toString())
                     }
                 }
                 storedata()
-                setPage()
+                if (room_images.isNotEmpty() && room_names.isNotEmpty()){
+                    setPage()
+                }
                 //Toast.makeText(applicationContext, "$room_images+***+$room_names", Toast.LENGTH_SHORT).show()
             }
 
@@ -72,23 +77,28 @@ class RoomActivity : AppCompatActivity() {
 
     private fun addImages(room: String) {
         for (category in images.keys) {
-            if (category in room.toLowerCase(Locale.ROOT)) {
+            if (category in room) {
                 images[category]?.let { room_images.add(it) }
             }
         }
     }
     private fun AddStoredData() {
         val List =
-            preferences!!.getStringSet("imageNames", setOf<String>())?.toMutableList()?.sorted()
+            preferences!!.getStringSet("imageNames", setOf<String>())?.toMutableList<String>()?.sorted()
         for(li in List!!.sorted()){
             //Toast.makeText(applicationContext, li, Toast.LENGTH_SHORT).show()
+            val roomName = li.split("_".toRegex()).map { it.trim() }
+            val category = roomName[1].toLowerCase(Locale.ROOT)
             if(li !in room_names){
                 room_names.add(li)
+                images[category]?.let { room_images.add(it) }
             }
-            Toast.makeText(applicationContext, room_names.toString(), Toast.LENGTH_SHORT).show()
-            addImages(li)
+            //Toast.makeText(applicationContext, room_names.toString(), Toast.LENGTH_SHORT).show()
+            //addImages(li)
         }
-        setPage()
+        if (room_images.isNotEmpty() && room_names.isNotEmpty()){
+            setPage()
+        }
     }
     private fun setPage() {
         val adapter =MyRoomAdapter(this, room_images, room_names, mail)
