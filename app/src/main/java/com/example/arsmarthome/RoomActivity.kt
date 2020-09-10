@@ -105,9 +105,9 @@ class RoomActivity : AppCompatActivity() {
         recycleview.adapter = adapter
         val orientation =resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            recycleview.layoutManager = GridLayoutManager(this, 3)
+            recycleview.layoutManager = GridLayoutManager(this, 2)
         } else {
-            recycleview.layoutManager = GridLayoutManager(this,2)
+            recycleview.layoutManager = GridLayoutManager(this,1)
         }
     }
 
