@@ -1,8 +1,14 @@
 package com.example.arsmarthome
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,43 +16,52 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_room.*
+import java.util.*
 
 
 val images: Map<String,Int> = mapOf(
     "bedroom" to R.drawable.bedroom,
     "kitchen" to R.drawable.kitchen,
     "living" to R.drawable.livingroom,
-    "balcony" to R.drawable.balcony
+    "balcony" to R.drawable.balcony,
+    "dinning" to R.drawable.diningroom,
+    "terrace" to R.drawable.terrace,
+    "garden" to R.drawable.garden,
+    "farmhouse" to R.drawable.farmhouse,
+    "office" to R.drawable.office,
+    "industry" to R.drawable.industry,
+    "aqua" to R.drawable.aqua,
+    "security" to R.drawable.security
 )
+val room_names: MutableList<String> = mutableListOf()
+val room_images: MutableList<Int> = mutableListOf()
 class RoomActivity : AppCompatActivity() {
-
-    val room_names: MutableList<String> = mutableListOf()
-    val room_images: MutableList<Int> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
+        preferences = getSharedPreferences("data", Context.MODE_PRIVATE)
         //Toast.makeText(applicationContext, "$roomNames", Toast.LENGTH_SHORT).show()
-        RoomData()
+        if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
+            AddStoredData()
+        }
+        else{
+            RoomData()
+        }
     }
     fun RoomData(){
         val myRef = database.getReference(mail)
         myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (room in dataSnapshot.children) {
-                    Toast.makeText(
-                        applicationContext,
-                        room.key + "*******" + room.value,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    room_names.add(room.key.toString())
-                    for (category in images.keys) {
-                        if (room.key.toString() in category) {
-                            images[category]?.let { room_images.add(it) }
-                        }
+                    //Toast.makeText(applicationContext, room.key + "*******" + room.value, Toast.LENGTH_SHORT).show()
+                    if (room.key.toString() !in room_names) {
+                        room_names.add(room.key.toString())
+                        addImages(room.key.toString())
                     }
                 }
+                storedata()
                 setPage()
-                Toast.makeText(applicationContext, "$room_images+***+$room_names", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(applicationContext, "$room_images+***+$room_names", Toast.LENGTH_SHORT).show()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -55,6 +70,26 @@ class RoomActivity : AppCompatActivity() {
         })
     }
 
+    private fun addImages(room: String) {
+        for (category in images.keys) {
+            if (category in room.toLowerCase(Locale.ROOT)) {
+                images[category]?.let { room_images.add(it) }
+            }
+        }
+    }
+    private fun AddStoredData() {
+        val List =
+            preferences!!.getStringSet("imageNames", setOf<String>())?.toMutableList()?.sorted()
+        for(li in List!!.sorted()){
+            //Toast.makeText(applicationContext, li, Toast.LENGTH_SHORT).show()
+            if(li !in room_names){
+                room_names.add(li)
+            }
+            Toast.makeText(applicationContext, room_names.toString(), Toast.LENGTH_SHORT).show()
+            addImages(li)
+        }
+        setPage()
+    }
     private fun setPage() {
         val adapter =MyRoomAdapter(this, room_images, room_names, mail)
         recycleview.adapter = adapter
@@ -66,5 +101,69 @@ class RoomActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.settings -> {
+                Toast.makeText(this,
+                    item.title.toString() + " Clicked ",
+                    Toast.LENGTH_SHORT)
+                    .show()
+                startActivity(Intent(this,Settings::class.java))
+                true
+            }
+            R.id.add_room -> {
+                Toast.makeText(this,
+                    item.title.toString() + " Clicked ",
+                    Toast.LENGTH_SHORT)
+                    .show()
+                val intent = Intent(this,AddRoomActivity::class.java)
+                intent.putExtra("main",mail)
+                startActivity(intent)
+                true
+            }
+            R.id.dial -> {
+                Toast.makeText(this,
+                    item.title.toString() + " Clicked",
+                    Toast.LENGTH_SHORT)
+                    .show()
+                val i = Intent(Intent.ACTION_DIAL)
+                i.data = Uri.parse("tel:"+"7997678666")
+                startActivity(i)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
+            AddStoredData()
+        }
+        else{
+            RoomData()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
+            AddStoredData()
+        }
+        else{
+            RoomData()
+        }
+    }
+}
+
+fun storedata() {
+    val editor = preferences!!.edit()
+    editor.putStringSet("imageNames", room_names.toSet())
+    editor.apply()
 }
 

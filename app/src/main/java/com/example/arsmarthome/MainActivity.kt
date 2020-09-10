@@ -3,6 +3,7 @@ package com.example.arsmarthome
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,7 @@ val TAG = ""
 private var mAuth: FirebaseAuth? = null
 val database = FirebaseDatabase.getInstance()
 val roomNames: MutableList<String> = mutableListOf()
+var preferences: SharedPreferences? = null
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +47,10 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "signInWithEmail:success")
                     val user = mAuth!!.currentUser
                     mail = email.split("@".toRegex()).map { it.trim() }[0]
-                    Toast.makeText(applicationContext, "$mail", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, mail, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@MainActivity, RoomActivity::class.java))
-                    SimpleAsyncTask().execute()
-
+                    //SimpleAsyncTask().execute()
+                    //RoomActivity().RoomData()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)

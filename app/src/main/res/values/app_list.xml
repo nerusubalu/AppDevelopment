@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="app_names">
+        <item>Light</item>
+        <item>Bedlamp</item>
+        <item>Fan</item>
+        <item>AC</item>
+        <item>TV</item>
+        <item>Curtain</item>
+        <item>Washing Machine</item>
+        <item>Bar Light</item>
+        <item>Exhaust</item>
+        <item>Gas</item>
+        <item>Geyser</item>
+        <item>Socket</item>
+        <item>PC</item>
+        <item>Water Tap</item>
+    </string-array>
+</resources>
