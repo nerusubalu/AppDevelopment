@@ -19,20 +19,21 @@ import kotlinx.android.synthetic.main.activity_room.*
 import java.util.*
 
 val images: Map<String, Int> = mapOf(
-    "bedroom" to R.drawable.bedroom,
-    "master bedroom" to R.drawable.bedroom,
-    "kitchen" to R.drawable.kitchen,
-    "living room" to R.drawable.livingroom,
-    "balcony" to R.drawable.balcony,
-    "dinning hall" to R.drawable.diningroom,
-    "terrace" to R.drawable.terrace,
-    "garage" to R.drawable.garage,
-    "garden" to R.drawable.garden,
-    "farmhouse" to R.drawable.farmhouse,
-    "office" to R.drawable.office,
-    "industry" to R.drawable.industry,
-    "aqua" to R.drawable.aqua,
-    "security" to R.drawable.security
+    "BEDROOM" to R.drawable.bedroom,
+    "KITCHEN" to R.drawable.kitchen,
+    "LIVING" to R.drawable.livingroom,
+    "BALCONY" to R.drawable.balcony,
+    "DINNING" to R.drawable.diningroom,
+    "TERRACE" to R.drawable.terrace,
+    "GARAGE" to R.drawable.garage,
+    "GARDEN" to R.drawable.garden,
+    "FARMHOUSE" to R.drawable.farmhouse,
+    "OFFICE" to R.drawable.office,
+    "INDUSTRY" to R.drawable.industry,
+    "AQUA" to R.drawable.aqua,
+    "SECURITY" to R.drawable.security,
+    "FARMING" to R.drawable.farmhouse,
+    "RESTROOM" to R.drawable.restroom
 )
 
 class RoomActivity : AppCompatActivity() {
@@ -46,7 +47,7 @@ class RoomActivity : AppCompatActivity() {
             preferences!!.getStringSet("imageNames", setOf<String>())?.toMutableList<String>()?.sorted()
         for(li in list!!.sorted()){
             val roomName = li.split("_".toRegex()).map { it.trim() }
-            val category = roomName[1].toLowerCase(Locale.ROOT)
+            val category = roomName[1]
             if(li !in room_names){
                 room_names.add(li)
                 images[category]?.let { room_images.add(it) }
@@ -62,9 +63,9 @@ class RoomActivity : AppCompatActivity() {
         recycleview.adapter = adapter
         val orientation =resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            recycleview.layoutManager = GridLayoutManager(this, 2)
+            recycleview.layoutManager = GridLayoutManager(this, 4)
         } else {
-            recycleview.layoutManager = GridLayoutManager(this, 1)
+            recycleview.layoutManager = GridLayoutManager(this, 3)
         }
     }
 
@@ -144,7 +145,7 @@ fun roomData(mail: String): Boolean {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             for (room in dataSnapshot.children) {
                 val roomName = room.key.toString().split("_".toRegex()).map { it.trim() }
-                val category = roomName[1].toLowerCase(Locale.ROOT)
+                val category = roomName[1]
                 if (room.key.toString() !in room_names) {
                     room_names.add(room.key.toString())
                     images[category]?.let { room_images.add(it) }

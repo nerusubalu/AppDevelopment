@@ -14,8 +14,8 @@ class AddRoomActivity : AppCompatActivity() {
     var pos = -1
 
     val imagesvalues = listOf(R.drawable.bedroom,R.drawable.kitchen,R.drawable.livingroom,R.drawable.diningroom,
-        R.drawable.bedroom,R.drawable.balcony,R.drawable.garage,R.drawable.office,
-        R.drawable.aqua,R.drawable.industry,R.drawable.terrace)
+        R.drawable.balcony,R.drawable.garage,R.drawable.office,
+        R.drawable.aqua,R.drawable.industry,R.drawable.terrace,R.drawable.farmhouse,R.drawable.farmhouse,R.drawable.security,R.drawable.restroom)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_room)
@@ -38,7 +38,7 @@ class AddRoomActivity : AppCompatActivity() {
         val myRef = database.getReference("$mail/$room/dummy")
         myRef.setValue(false)
         val roomName = room.split("_".toRegex()).map { it.trim() }
-        val category = roomName[1].toLowerCase(Locale.ROOT)
+        val category = roomName[1]
         room_names.add(room)
         if (category in images.keys){
             images[category].let { room_images.add(it!!) }

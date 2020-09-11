@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
     <string-array name="room_names" >
-        <item>Bedroom</item>
-        <item>Kitchen</item>
-        <item>Living Room</item>
-        <item>Dinning Hall</item>
-        <item>Master Bedroom</item>
-        <item>Balcony</item>
-        <item>Garage</item>
-        <item>Office</item>
-        <item>Aqua</item>
-        <item>Industry</item>
-        <item>Terrace</item>
+        <item>BEDROOM</item>
+        <item>KITCHEN</item>
+        <item>LIVING</item>
+        <item>DINNING</item>
+        <item>BALCONY</item>
+        <item>GARAGE</item>
+        <item>OFFICE</item>
+        <item>AQUA</item>
+        <item>INDUSTRY</item>
+        <item>TERRACE</item>
+        <item>FARMING</item>
+        <item>FARMHOUSE</item>
+        <item>SECURITY</item>
+        <item>RESTROOM</item>
     </string-array>
 </resources>
