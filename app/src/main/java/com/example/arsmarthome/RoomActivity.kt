@@ -1,6 +1,5 @@
 package com.example.arsmarthome
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
@@ -11,6 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -40,57 +40,19 @@ class RoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
         mAuth = FirebaseAuth.getInstance()
-        preferences = getSharedPreferences("data", Context.MODE_PRIVATE)
     }
-    fun RoomData(){
-        val myRef = database.getReference(mail)
-        myRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (room in dataSnapshot.children) {
-                    //Toast.makeText(applicationContext, room.key + "*******" + room.value, Toast.LENGTH_SHORT).show()
-                    val roomName = room.key.toString().split("_".toRegex()).map { it.trim() }
-                    val category = roomName[1].toLowerCase(Locale.ROOT)
-                    if (room.key.toString() !in room_names) {
-                        room_names.add(room.key.toString())
-                        images[category]?.let { room_images.add(it) }
-                        //addImages(room.key.toString())
-                    }
-                }
-                storedata()
-                if (room_images.isNotEmpty() && room_names.isNotEmpty()) {
-                    setPage()
-                }
-                //Toast.makeText(applicationContext, "$room_images+***+$room_names", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
-    }
-/*
-    private fun addImages(room: String) {
-        for (category in images.keys) {
-            if (category in room) {
-                images[category]?.let { room_images.add(it) }
-            }
-        }
-    }*/
     private fun addStoredData() {
         val list =
             preferences!!.getStringSet("imageNames", setOf<String>())?.toMutableList<String>()?.sorted()
         for(li in list!!.sorted()){
-            //Toast.makeText(applicationContext, li, Toast.LENGTH_SHORT).show()
             val roomName = li.split("_".toRegex()).map { it.trim() }
             val category = roomName[1].toLowerCase(Locale.ROOT)
             if(li !in room_names){
                 room_names.add(li)
                 images[category]?.let { room_images.add(it) }
             }
-            //Toast.makeText(applicationContext, room_names.toString(), Toast.LENGTH_SHORT).show()
-            //addImages(li)
         }
-        storedata()
+        storeData()
         if (room_images.isNotEmpty() && room_names.isNotEmpty()){
             setPage()
         }
@@ -153,22 +115,12 @@ class RoomActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
-            addStoredData()
-        }
-        else{
-            RoomData()
-        }
+        addStoredData()
     }
 
     override fun onResume() {
         super.onResume()
-        if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
-            addStoredData()
-        }
-        else{
-            RoomData()
-        }
+        addStoredData()
     }
 
     override fun onStart() {
@@ -186,33 +138,29 @@ class RoomActivity : AppCompatActivity() {
     }
 }
 
-fun RoomData(){
+fun roomData(mail: String): Boolean {
     val myRef = database.getReference(mail)
     myRef.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             for (room in dataSnapshot.children) {
-                //Toast.makeText(applicationContext, room.key + "*******" + room.value, Toast.LENGTH_SHORT).show()
                 val roomName = room.key.toString().split("_".toRegex()).map { it.trim() }
                 val category = roomName[1].toLowerCase(Locale.ROOT)
                 if (room.key.toString() !in room_names) {
                     room_names.add(room.key.toString())
                     images[category]?.let { room_images.add(it) }
-                    //addImages(room.key.toString())
                 }
             }
-            storedata()
-            //Toast.makeText(applicationContext, "$room_images+***+$room_names", Toast.LENGTH_SHORT).show()
+            storeData()
         }
-
         override fun onCancelled(error: DatabaseError) {
             Log.w(TAG, "Failed to read value.", error.toException())
         }
     })
+    return true
 }
 
-fun storedata() {
+fun storeData() {
     val editor = preferences!!.edit()
     editor.putStringSet("imageNames", room_names.toSet())
     editor.apply()
 }
-

@@ -1,5 +1,6 @@
 package com.example.arsmarthome
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mAuth = FirebaseAuth.getInstance()
+        preferences = getSharedPreferences("data", Context.MODE_PRIVATE)
         login.setOnClickListener {
             email = Email.editText?.text.toString()
             password = Password.editText?.text.toString()
@@ -51,12 +53,13 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     setContentView(R.layout.ar_layout)
-                    RoomData()
-                    val handler = Handler()
-                    handler.postDelayed(Runnable {
-                        val user = mAuth.currentUser
-                        updateUI(user)
-                    }, 2000)
+                    if(roomData(mAuth.currentUser!!.email.toString().split("@".toRegex()).map { it.trim() }[0])){
+                        val handler = Handler()
+                        handler.postDelayed(Runnable {
+                            val user = mAuth.currentUser
+                            updateUI(user)
+                        }, 2000)
+                    }
                     Log.d(TAG, "signInWithEmail:success")
                 } else {
                     // If sign in fails, display a message to the user.
@@ -87,5 +90,3 @@ class MainActivity : AppCompatActivity() {
         updateUI(currentUser)
     }
 }
-
-
