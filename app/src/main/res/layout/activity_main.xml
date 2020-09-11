@@ -128,6 +128,7 @@
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/login"
                         android:text="Login"
                         android:textColor="#fff"
                         android:textSize="30sp"

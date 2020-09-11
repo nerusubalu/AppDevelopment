@@ -34,8 +34,7 @@ val images: Map<String, Int> = mapOf(
     "aqua" to R.drawable.aqua,
     "security" to R.drawable.security
 )
-val room_names: MutableList<String> = mutableListOf()
-val room_images: MutableList<Int> = mutableListOf()
+
 class RoomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,12 +177,43 @@ class RoomActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (room_images.isNotEmpty() && room_names.isNotEmpty()){
+            setPage()
+        }
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         if(!mAuth!!.currentUser!!.isEmailVerified) {
             finishAffinity()
         }
     }
+}
+
+fun RoomData(){
+    val myRef = database.getReference(mail)
+    myRef.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            for (room in dataSnapshot.children) {
+                //Toast.makeText(applicationContext, room.key + "*******" + room.value, Toast.LENGTH_SHORT).show()
+                val roomName = room.key.toString().split("_".toRegex()).map { it.trim() }
+                val category = roomName[1].toLowerCase(Locale.ROOT)
+                if (room.key.toString() !in room_names) {
+                    room_names.add(room.key.toString())
+                    images[category]?.let { room_images.add(it) }
+                    //addImages(room.key.toString())
+                }
+            }
+            storedata()
+            //Toast.makeText(applicationContext, "$room_images+***+$room_names", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            Log.w(TAG, "Failed to read value.", error.toException())
+        }
+    })
 }
 
 fun storedata() {
