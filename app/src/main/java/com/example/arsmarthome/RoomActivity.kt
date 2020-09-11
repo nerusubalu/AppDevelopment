@@ -24,7 +24,7 @@ val images: Map<String, Int> = mapOf(
     "kitchen" to R.drawable.kitchen,
     "living room" to R.drawable.livingroom,
     "balcony" to R.drawable.balcony,
-    "dinning" to R.drawable.diningroom,
+    "dinning hall" to R.drawable.diningroom,
     "terrace" to R.drawable.terrace,
     "garage" to R.drawable.garage,
     "garden" to R.drawable.garden,
@@ -41,12 +41,6 @@ class RoomActivity : AppCompatActivity() {
         setContentView(R.layout.activity_room)
         mAuth = FirebaseAuth.getInstance()
         preferences = getSharedPreferences("data", Context.MODE_PRIVATE)
-        if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
-            addStoredData()
-        }
-        else{
-            RoomData()
-        }
     }
     fun RoomData(){
         val myRef = database.getReference(mail)
@@ -186,7 +180,7 @@ class RoomActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if(!mAuth!!.currentUser!!.isEmailVerified) {
+        if(!mAuth.currentUser!!.isEmailVerified) {
             finishAffinity()
         }
     }

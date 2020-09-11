@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun signIn(email: String, password: String){
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(
@@ -51,9 +50,14 @@ class MainActivity : AppCompatActivity() {
             ) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
+                    setContentView(R.layout.ar_layout)
+                    RoomData()
+                    val handler = Handler()
+                    handler.postDelayed(Runnable {
+                        val user = mAuth.currentUser
+                        updateUI(user)
+                    }, 2000)
                     Log.d(TAG, "signInWithEmail:success")
-                    val user = mAuth!!.currentUser
-                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -66,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             }
 
     }
-
     private fun updateUI(user: FirebaseUser?) {
         if (user!=null){
             setContentView(R.layout.ar_layout)
@@ -74,48 +77,15 @@ class MainActivity : AppCompatActivity() {
             handler.postDelayed(Runnable {
                 mail = user.email.toString().split("@".toRegex()).map { it.trim() }[0]
                 startActivity(Intent(this@MainActivity, RoomActivity::class.java))
-            }, 1000)
+            }, 250)
         }
 
     }
-
     override fun onStart() {
         super.onStart()
         val currentUser = mAuth.currentUser
         updateUI(currentUser)
     }
-
-    /*fun signIn(view: View) {
-        val user = mAuth!!.currentUser
-        email = Email.editText?.text.toString()
-        password = Password.editText?.text.toString()
-        email = "nerusubalu@gmail.com"
-        password = "I1oveindi@"
-        val currentUser = mAuth!!.currentUser
-        mAuth!!.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(
-                this
-            ) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success")
-                    val user = mAuth!!.currentUser
-                    mail = email.split("@".toRegex()).map { it.trim() }[0]
-                    RoomData()
-                    Toast.makeText(applicationContext, mail, Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@MainActivity, RoomActivity::class.java))
-                    //SimpleAsyncTask().execute()
-                    //RoomActivity().RoomData()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        this@MainActivity, "Authentication failed.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-    }*/
 }
 
 
