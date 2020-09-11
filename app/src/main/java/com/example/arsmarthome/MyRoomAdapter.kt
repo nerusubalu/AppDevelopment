@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -34,6 +35,9 @@ class MyRoomAdapter (
             intent.putExtra("room",name[position])
             context.startActivity(intent)
         }
+        holder.card.setOnLongClickListener {
+            Toast.makeText(context, "Long Press", Toast.LENGTH_SHORT).show()
+            true}
     }
 
     override fun getItemCount(): Int {

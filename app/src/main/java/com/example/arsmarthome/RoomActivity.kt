@@ -11,14 +11,14 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_room.*
 import java.util.*
 
-
-val images: Map<String,Int> = mapOf(
+val images: Map<String, Int> = mapOf(
     "bedroom" to R.drawable.bedroom,
     "master bedroom" to R.drawable.bedroom,
     "kitchen" to R.drawable.kitchen,
@@ -26,6 +26,7 @@ val images: Map<String,Int> = mapOf(
     "balcony" to R.drawable.balcony,
     "dinning" to R.drawable.diningroom,
     "terrace" to R.drawable.terrace,
+    "garage" to R.drawable.garage,
     "garden" to R.drawable.garden,
     "farmhouse" to R.drawable.farmhouse,
     "office" to R.drawable.office,
@@ -39,6 +40,7 @@ class RoomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
+        mAuth = FirebaseAuth.getInstance()
         preferences = getSharedPreferences("data", Context.MODE_PRIVATE)
         if (!preferences!!.getStringSet("imageNames", mutableSetOf())?.isEmpty()!!){
             addStoredData()
@@ -62,7 +64,7 @@ class RoomActivity : AppCompatActivity() {
                     }
                 }
                 storedata()
-                if (room_images.isNotEmpty() && room_names.isNotEmpty()){
+                if (room_images.isNotEmpty() && room_names.isNotEmpty()) {
                     setPage()
                 }
                 //Toast.makeText(applicationContext, "$room_images+***+$room_names", Toast.LENGTH_SHORT).show()
@@ -95,6 +97,7 @@ class RoomActivity : AppCompatActivity() {
             //Toast.makeText(applicationContext, room_names.toString(), Toast.LENGTH_SHORT).show()
             //addImages(li)
         }
+        storedata()
         if (room_images.isNotEmpty() && room_names.isNotEmpty()){
             setPage()
         }
@@ -106,7 +109,7 @@ class RoomActivity : AppCompatActivity() {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             recycleview.layoutManager = GridLayoutManager(this, 2)
         } else {
-            recycleview.layoutManager = GridLayoutManager(this,1)
+            recycleview.layoutManager = GridLayoutManager(this, 1)
         }
     }
 
@@ -118,30 +121,36 @@ class RoomActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.settings -> {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     item.title.toString() + " Clicked ",
-                    Toast.LENGTH_SHORT)
+                    Toast.LENGTH_SHORT
+                )
                     .show()
-                startActivity(Intent(this,Settings::class.java))
+                startActivity(Intent(this, Settings::class.java))
                 true
             }
             R.id.add_room -> {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     item.title.toString() + " Clicked ",
-                    Toast.LENGTH_SHORT)
+                    Toast.LENGTH_SHORT
+                )
                     .show()
-                val intent = Intent(this,AddRoomActivity::class.java)
-                intent.putExtra("main",mail)
+                val intent = Intent(this, AddRoomActivity::class.java)
+                intent.putExtra("main", mail)
                 startActivity(intent)
                 true
             }
             R.id.dial -> {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     item.title.toString() + " Clicked",
-                    Toast.LENGTH_SHORT)
+                    Toast.LENGTH_SHORT
+                )
                     .show()
                 val i = Intent(Intent.ACTION_DIAL)
-                i.data = Uri.parse("tel:"+"7997678666")
+                i.data = Uri.parse("tel:" + "7997678666")
                 startActivity(i)
                 true
             }
@@ -166,6 +175,13 @@ class RoomActivity : AppCompatActivity() {
         }
         else{
             RoomData()
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if(!mAuth!!.currentUser!!.isEmailVerified) {
+            finishAffinity()
         }
     }
 }
