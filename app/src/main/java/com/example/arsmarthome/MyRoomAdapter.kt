@@ -1,6 +1,7 @@
 package com.example.arsmarthome
 
 import android.content.Intent
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
+var room = ""
 class MyRoomAdapter (
     var context: RoomActivity,
     var img: MutableList<Int>,
@@ -32,7 +34,17 @@ class MyRoomAdapter (
         holder.card.setOnClickListener {
             val intent = Intent(context, ApplianceActivity::class.java)
             intent.putExtra("room name",name[position])
-            context.startActivity(intent)
+            room = name[position]
+            if (preferences!!.getStringSet(name[position], mutableSetOf())!!.isNotEmpty()){
+                context.startActivity(intent)
+            }
+            else{
+                applianceData("${mail}/${name[position]}")
+                val handler = Handler()
+                handler.postDelayed(Runnable {
+                    context.startActivity(intent)
+                }, 2000)
+            }
         }
         holder.card.setOnLongClickListener {
             Toast.makeText(context, "Long Press", Toast.LENGTH_SHORT).show()

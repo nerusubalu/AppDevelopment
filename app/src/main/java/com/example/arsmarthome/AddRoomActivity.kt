@@ -13,9 +13,9 @@ class AddRoomActivity : AppCompatActivity() {
     var room = ""
     var pos = -1
 
-    val imagesvalues = listOf(R.drawable.bedroom,R.drawable.kitchen,R.drawable.livingroom,R.drawable.diningroom,
+    val imagesvalues = listOf(R.drawable.bedroom,R.drawable.kitchen,R.drawable.living,R.drawable.dinning,
         R.drawable.balcony,R.drawable.garage,R.drawable.office,
-        R.drawable.aqua,R.drawable.industry,R.drawable.terrace,R.drawable.farmhouse,R.drawable.farmhouse,R.drawable.security,R.drawable.restroom)
+        R.drawable.aqua,R.drawable.industry,R.drawable.terrace,R.drawable.farmhouse,R.drawable.farming,R.drawable.security,R.drawable.restroom)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_room)

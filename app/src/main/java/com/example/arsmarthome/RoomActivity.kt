@@ -21,9 +21,9 @@ import java.util.*
 val images: Map<String, Int> = mapOf(
     "BEDROOM" to R.drawable.bedroom,
     "KITCHEN" to R.drawable.kitchen,
-    "LIVING" to R.drawable.livingroom,
+    "LIVING" to R.drawable.living,
     "BALCONY" to R.drawable.balcony,
-    "DINNING" to R.drawable.diningroom,
+    "DINNING" to R.drawable.dinning,
     "TERRACE" to R.drawable.terrace,
     "GARAGE" to R.drawable.garage,
     "GARDEN" to R.drawable.garden,
@@ -32,7 +32,7 @@ val images: Map<String, Int> = mapOf(
     "INDUSTRY" to R.drawable.industry,
     "AQUA" to R.drawable.aqua,
     "SECURITY" to R.drawable.security,
-    "FARMING" to R.drawable.farmhouse,
+    "FARMING" to R.drawable.farming,
     "RESTROOM" to R.drawable.restroom
 )
 
